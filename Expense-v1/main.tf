@@ -11,6 +11,7 @@ resource "aws_instance" "frontend" {
     command = <<EOF
 cd /home/centos/infra-ansible
 git pull
+sleep 60
 ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=frontend
 EOF
   }
@@ -25,6 +26,37 @@ resource "aws_route53_record" "frontend" {
   records = [aws_instance.frontend.private_ip]
 }
 
+
+resource "aws_instance" "mysql" {
+  ami           = data.aws_ami.ami.image_id
+  instance_type = "t2.micro"
+  vpc_security_group_ids = [data.aws_security_group.sg.id]
+
+  tags = {
+    Name = "mysql"
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+cd /home/centos/infra-ansible
+git pull
+sleep 60
+ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=mysql
+EOF
+  }
+
+
+}
+
+resource "aws_route53_record" "mysql" {
+  zone_id = data.aws_route53_zone.zone.id
+  name    = "mysql.${var.zone_id}"
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.mysql.private_ip]
+}
+
+
 resource "aws_instance" "backend" {
   ami           = data.aws_ami.ami.image_id
   instance_type = "t2.micro"
@@ -38,6 +70,7 @@ resource "aws_instance" "backend" {
     command = <<EOF
 cd /home/centos/infra-ansible
 git pull
+sleep 60
 ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=backend
 EOF
   }
@@ -53,30 +86,3 @@ resource "aws_route53_record" "backend" {
   records = [aws_instance.backend.private_ip]
 }
 
-resource "aws_instance" "mysql" {
-  ami           = data.aws_ami.ami.image_id
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [data.aws_security_group.sg.id]
-
-  tags = {
-    Name = "mysql"
-  }
-
-  provisioner "local-exec" {
-    command = <<EOF
-cd /home/centos/infra-ansible
-git pull
-ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=mysql
-EOF
-  }
-
-
-}
-
-resource "aws_route53_record" "mysql" {
-  zone_id = data.aws_route53_zone.zone.id
-  name    = "mysql.${var.zone_id}"
-  type    = "A"
-  ttl     = 300
-  records = [aws_instance.mysql.private_ip]
-}
