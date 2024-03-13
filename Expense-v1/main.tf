@@ -26,9 +26,9 @@ resource "aws_instance" "backend" {
   }
 }
 
-resource "aws_route53_record" "frontend" {
+resource "aws_route53_record" "backend" {
   zone_id = "Z03521483OD8G6IJR191"
-  name    = "frontend.techadda.co"
+  name    = "backend.techadda.co"
   type    = "A"
   ttl     = 300
   records = [aws_instance.backend.private_ip]
