@@ -22,7 +22,7 @@ resource "null_resource" "ansible" {
 
   provisioner "local-exec" {
     command = <<EOF
-cd /home/centos/infra-ansible
+cd /root/infra-ansible
 git pull
 sleep 60
 ansible-playbook -i ${aws_instance.instance.private_ip}, -e ansible_user=centos -e ansible_password=DevOps321 main.yml -e role_name=${var.component}
