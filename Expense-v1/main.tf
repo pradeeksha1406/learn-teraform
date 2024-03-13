@@ -6,8 +6,6 @@ resource "aws_instance" "frontend" {
   tags = {
     Name = "frontend"
   }
-
-
 }
 
 resource "aws_route53_record" "frontend" {
@@ -19,6 +17,7 @@ resource "aws_route53_record" "frontend" {
 }
 
 resource "null_resource" "frontend" {
+  depends_on = [aws_route53_record.frontend ]
 
   provisioner "local-exec" {
     command = <<EOF
@@ -51,6 +50,7 @@ resource "aws_route53_record" "mysql" {
 }
 
 resource "null_resource" "mysql" {
+  depends_on = [aws_route53_record.mysql]
 
   provisioner "local-exec" {
     command = <<EOF
@@ -83,6 +83,7 @@ resource "aws_route53_record" "backend" {
 }
 
 resource "null_resource" "backend" {
+  depends_on = [aws_route53_record.backend]
 
   provisioner "local-exec" {
     command = <<EOF
