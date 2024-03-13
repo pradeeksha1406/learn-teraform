@@ -9,7 +9,7 @@ resource "aws_instance" "frontend" {
 
   provisioner "local-exec" {
     command = <<EOF
-cd /home/centos/infra-ansible
+cd /root/infra-ansible
 git pull
 sleep 60
 ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=frontend
@@ -38,7 +38,7 @@ resource "aws_instance" "mysql" {
 
   provisioner "local-exec" {
     command = <<EOF
-cd /home/centos/infra-ansible
+cd /root/infra-ansible
 git pull
 sleep 60
 ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=mysql
@@ -68,7 +68,7 @@ resource "aws_instance" "backend" {
 
   provisioner "local-exec" {
     command = <<EOF
-cd /home/centos/infra-ansible
+cd /root/infra-ansible
 git pull
 sleep 60
 ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=backend
