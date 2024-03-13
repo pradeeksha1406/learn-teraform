@@ -11,7 +11,7 @@ resource "aws_instance" "frontend" {
 
 
 resource "aws_route53_record" "frontend" {
-  zone_id = "Z03521483OD8G6IJR191"
+  zone_id = data.aws_route53_zone.zone.id
   name    = "frontend.techadda.co"
   type    = "A"
   ttl     = 300
@@ -29,7 +29,7 @@ resource "aws_instance" "backend" {
 }
 
 resource "aws_route53_record" "backend" {
-  zone_id = "Z03521483OD8G6IJR191"
+  zone_id = data.aws_route53_zone.zone.id
   name    = "backend.techadda.co"
   type    = "A"
   ttl     = 300
@@ -47,7 +47,7 @@ resource "aws_instance" "mysql" {
 }
 
 resource "aws_route53_record" "mysql" {
-  zone_id = "Z03521483OD8G6IJR191"
+  zone_id = data.aws_route53_zone.zone.id
   name    = "mysql.techadda.co"
   type    = "A"
   ttl     = 300
