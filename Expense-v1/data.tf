@@ -4,7 +4,6 @@ data "aws_ami" "ami"{
   owners = ["973714476881"]
 }
 
-
 data "aws_security_group" "sg" {
-  name = "Allow All"
+  name = "Allow all"
 }
