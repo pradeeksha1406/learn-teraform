@@ -7,14 +7,6 @@ resource "aws_instance" "frontend" {
     Name = "frontend"
   }
 
-  provisioner "local-exec" {
-    command = <<EOF
-cd /root/infra-ansible
-git pull
-sleep 60
-ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=frontend
-EOF
-  }
 
 }
 
@@ -26,6 +18,19 @@ resource "aws_route53_record" "frontend" {
   records = [aws_instance.frontend.private_ip]
 }
 
+resource "null_resource" "frontend" {
+
+  provisioner "local-exec" {
+    command = <<EOF
+cd /root/infra-ansible
+git pull
+sleep 60
+ansible-playbook -i ${aws_instance.frontend.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=frontend
+EOF
+  }
+
+}
+
 
 resource "aws_instance" "mysql" {
   ami           = data.aws_ami.ami.image_id
@@ -35,17 +40,6 @@ resource "aws_instance" "mysql" {
   tags = {
     Name = "mysql"
   }
-
-  provisioner "local-exec" {
-    command = <<EOF
-cd /root/infra-ansible
-git pull
-sleep 60
-ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=mysql
-EOF
-  }
-
-
 }
 
 resource "aws_route53_record" "mysql" {
@@ -56,6 +50,18 @@ resource "aws_route53_record" "mysql" {
   records = [aws_instance.mysql.private_ip]
 }
 
+resource "null_resource" "mysql" {
+
+  provisioner "local-exec" {
+    command = <<EOF
+cd /root/infra-ansible
+git pull
+sleep 60
+ansible-playbook -i ${aws_instance.mysql.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=mysql
+EOF
+  }
+
+}
 
 resource "aws_instance" "backend" {
   ami           = data.aws_ami.ami.image_id
@@ -66,17 +72,7 @@ resource "aws_instance" "backend" {
     Name = "backend"
   }
 
-  provisioner "local-exec" {
-    command = <<EOF
-cd /root/infra-ansible
-git pull
-sleep 60
-ansible-playbook -i ${self.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=backend
-EOF
-  }
-
-
-}
+ }
 
 resource "aws_route53_record" "backend" {
   zone_id = data.aws_route53_zone.zone.id
@@ -84,5 +80,18 @@ resource "aws_route53_record" "backend" {
   type    = "A"
   ttl     = 300
   records = [aws_instance.backend.private_ip]
+}
+
+resource "null_resource" "backend" {
+
+  provisioner "local-exec" {
+    command = <<EOF
+cd /root/infra-ansible
+git pull
+sleep 60
+ansible-playbook -i ${aws_instance.backend.private_ip}, -e ansible_name=centos -e ansible_password=DevOps321 main.yml -e roles_name=backend
+EOF
+  }
+
 }
 
