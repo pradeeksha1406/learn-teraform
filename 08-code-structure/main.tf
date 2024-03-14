@@ -8,6 +8,5 @@ variable "env" {}
 
 
 terraform {
-
   backend "s3" {}
 }
