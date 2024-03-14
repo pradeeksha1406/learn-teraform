@@ -1,6 +1,6 @@
 resource "null_resource " "test" {
   provisioner "local-exec" {
-    command = "echo hello world -${var.env} Environment "
+    command = "echo hello world -${var.env} Environment"
   }
 }
 
