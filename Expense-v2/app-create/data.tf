@@ -1,5 +1,5 @@
 data "aws_ami" "ami"{
-  most_recent = true
+  most_recent = false
   name_regex  = "Centos-8-DevOps-Practice"
   owners = ["973714476881"]
 }
@@ -20,4 +20,5 @@ variable "zone_id" {
 locals {
   ami = data.aws_ami.ami.image_id
   zone_id = data.aws_route53_zone.zone.id
+  Sg_id = data.aws_security_group.sg.id
 }
