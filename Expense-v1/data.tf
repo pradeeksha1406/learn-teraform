@@ -16,4 +16,6 @@ data "aws_route53_zone" "zone" {
 variable "zone_id" {
   default = "techadda.co"
 }
-
+output "printzoneid" {
+  value = "${var.zone_id}"
+}
